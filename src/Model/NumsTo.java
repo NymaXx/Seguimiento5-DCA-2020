@@ -5,9 +5,8 @@ import processing.core.PApplet;
 
 public class NumsTo implements Comparable <NumsTo>{
 	
-	public Logic log;
-	public int value;
-	private PApplet app;
+	protected int value;
+	protected PApplet app;
 	
 	NumsTo(int value, PApplet app){
 		this.app=app;

@@ -15,7 +15,7 @@ public class Logic implements Runnable {
 	private ArrayList<NumsTo> Arr;
 	private NumValueCompare valueCompare;
 	String[] data;
-	private Boolean mood;
+	
 	int counter;
 	public static int sanoCount, infecCount, recCount;
 	
@@ -24,7 +24,7 @@ public class Logic implements Runnable {
 	public Logic(PApplet app) {
 		this.app = app;
 		counter=15;
-		mood =false;
+		
 		valueCompare= new NumValueCompare();
 		//persons = new ArrayList<ModelPerson>();
 		health = new ArrayList <ModelHealthy>();
@@ -118,7 +118,7 @@ public class Logic implements Runnable {
 			app.text(Arr.get(i).getValue(), 10, 20 + (20 * i));
 			System.out.println(Arr.get(i));
 		}
-		mood=true;
+	
 		
 		
 	}
@@ -210,7 +210,7 @@ public class Logic implements Runnable {
 		
 	
 	}
-	public void vailadeExcep() throws PercentException{
+	public void validateExcep() throws PercentException{
 		if(sanoCount <= 30) {
 			throw new PercentException("Mas del 30% ha sido infectado");
 		
