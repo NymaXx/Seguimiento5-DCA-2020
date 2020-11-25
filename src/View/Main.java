@@ -30,9 +30,14 @@ public class Main extends PApplet{
 	
 	public void draw() {
 		background(255);
-		log.Recoveredtimer();
+		//log.Recoveredtimer();
 		log.pintar();
 		
 		
+		
+	}
+	
+	public void keyPressed() {
+		log.sortCounters(key);
 	}
 }

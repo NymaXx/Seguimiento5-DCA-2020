@@ -1,28 +1,39 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import processing.core.PApplet;
 
 public class Logic implements Runnable {
 
 	private PApplet app;
-	private ArrayList<ModelPerson> persons;
+	//private ArrayList<ModelPerson> persons;
 	private ArrayList<ModelHealthy> health;
 	private ArrayList<ModelInfected> infect;
 	private ArrayList<ModelRecovered> recov;
+	private ArrayList<NumsTo> Arr;
+	private NumValueCompare valueCompare;
 	String[] data;
+	private Boolean mood;
 	int counter;
-	int sanoCount, infecCount, recCount;
+	public static int sanoCount, infecCount, recCount;
+	
+	
 	
 	public Logic(PApplet app) {
 		this.app = app;
 		counter=15;
-		
-		persons = new ArrayList<ModelPerson>();
+		mood =false;
+		valueCompare= new NumValueCompare();
+		//persons = new ArrayList<ModelPerson>();
 		health = new ArrayList <ModelHealthy>();
 		infect = new ArrayList <ModelInfected>();
 		recov = new ArrayList <ModelRecovered>();
+		Arr = new ArrayList <NumsTo>();
+		Arr.add(new NumsTo(sanoCount, app));
+		Arr.add(new NumsTo(recCount, app));
+		Arr.add(new NumsTo(infecCount, app));
 		
 		String[] data = app.loadStrings("data.txt");
 		String[] sanos = data[0].split(":",2);
@@ -50,13 +61,41 @@ public class Logic implements Runnable {
 			recov.add(r);
 			//OJO PACHO X3
 			recCount = recov.size();
-			
 			new Thread(r).start();
 		
 		}
 		
+	
+		
+		
 	}
 
+	public void sortCounters(char  c) {
+		
+		/*for(int i=0; i< Arr.size(); i++) {
+			app.text(Arr.get(i).getValue(), 10, 20 + (20 * i));
+		}*/
+		
+		switch(c) {
+		case 'n':
+			Collections.sort(Arr);
+			
+		
+			break;
+			
+		case 'p':
+			Collections.sort(Arr,valueCompare);
+			break;
+		default:
+			break;
+		}
+		
+			
+	}
+	
+	
+	
+	
 	public void pintar() {
 		
 		for (int i = 0; i < health.size(); i++) {
@@ -73,17 +112,26 @@ public class Logic implements Runnable {
 		app.fill(255);
 		app.textSize(15);
 		app.text("Sanos    " + sanoCount, 20,20);
-		app.text("Infectados    " + infecCount, 20,35);
-		app.text("Recuperados    " + recCount, 20,50);
+		app.text("Infectados    "+ infecCount , 20,40);
+		app.text("Recuperados    " + recCount, 20,60);
+		for(int i=0; i< Arr.size(); i++) {
+			app.text(Arr.get(i).getValue(), 10, 20 + (20 * i));
+			System.out.println(Arr.get(i));
+		}
+		mood=true;
 		
 		
 	}
 	
 	public void Recoveredtimer(){
-		if(app.frameCount% 50 == 0) {
+		if(app.frameCount% 40 == 0) {
 			counter --;
 			//System.out.println(counter);
 			}
+		if(counter == -1) {
+			counter = 15;
+			
+		}
 		
 		/*for(int i =0; i < persons.size(); i++) {
 				for(int j=0; j < persons.size(); j++) {
@@ -112,8 +160,9 @@ public class Logic implements Runnable {
 	
 		while(true) {
 				for (int i = 0; i < infect.size(); i++) {
+					ModelInfected a = infect.get(i);
 					for (int j = 0; j < health.size(); j++) {
-						ModelInfected a = infect.get(i);
+						
 						ModelHealthy b = health.get(j);
 						if (PApplet.dist(a.getPosX(), a.getPosY(), b.getPosX(), b.getPosY())<=a.getRadio()*2) {
 							a.setSpeedX(a.getSpeedX()*-1);
@@ -140,23 +189,25 @@ public class Logic implements Runnable {
 					}
 				}
 				
-				for (int q = 0; q < persons.size(); q++) {
-					ModelPerson a = persons.get(q);
-					if(counter == 0 && a instanceof ModelInfected) {
+				for (int q = 0; q < recov.size(); q++) {
+					ModelRecovered b = recov.get(q);
+					if(counter == 0 ) {
 					if (a.isVivo() == false) {
 						int x = a.getPosX();
 						int y = a.getPosY();
-						persons.remove(a);
-						ModelPerson b = new ModelRecovered(app);
+						infect.remove(a);
 						b.setPosX(x);
 						b.setPosY(y);
-						persons.add(b);
+						recov.add(b);
 						new Thread(b).start();
+						recCount = infect.size();
+						
 								}
 							}
 						}
 					}
 				}
+		
 	
 	}
 	public void vailadeExcep() throws PercentException{
@@ -164,6 +215,30 @@ public class Logic implements Runnable {
 			throw new PercentException("Mas del 30% ha sido infectado");
 		
 		}
+	}
+
+	public static int getSanoCount() {
+		return sanoCount;
+	}
+
+	public static void setSanoCount(int sanoCount) {
+		Logic.sanoCount = sanoCount;
+	}
+
+	public static int getInfecCount() {
+		return infecCount;
+	}
+
+	public static void setInfecCount(int infecCount) {
+		Logic.infecCount = infecCount;
+	}
+
+	public static int getRecCount() {
+		return recCount;
+	}
+
+	public static void setRecCount(int recCount) {
+		Logic.recCount = recCount;
 	}
 	
 	

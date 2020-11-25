@@ -4,8 +4,10 @@ import processing.core.PApplet;
 
 public class ModelInfected extends ModelPerson {
 
+		static int counter;
 	public ModelInfected(PApplet app) {
 		super(app);
+		counter = 15;
 		/*Runnable curar =
 			    new Runnable(){
 			        public void run(){
@@ -31,6 +33,8 @@ public class ModelInfected extends ModelPerson {
 		app.fill(0);
 		app.text("I", posX, posY);
 	}
+	
+	
 	
 
 }
