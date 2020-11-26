@@ -180,6 +180,8 @@ public class Logic implements Runnable {
 								a.setPosX(b.getPosX());
 								a.setPosY(b.getPosY());
 								infect.add(c);
+								c.setPosX(b.getPosX());
+								c.setPosY(b.getPosY());
 								sanoCount = health.size();
 								infecCount = infect.size();
 								new Thread(c).start();
@@ -187,8 +189,9 @@ public class Logic implements Runnable {
 							}  
 						//}	
 					}
+						
 				}
-				
+					
 				for (int q = 0; q < recov.size(); q++) {
 					ModelRecovered b = recov.get(q);
 					if(counter == 0 ) {
